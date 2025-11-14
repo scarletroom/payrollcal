@@ -45,7 +45,7 @@
           <input id="month" type="number" min="1" max="12" placeholder="1" />
 
           <label for="year">Year (e.g. 2024)</label>
-          <input id="year" type="number" min="1900" max="3000" placeholder="2024" />
+          <input id="year" type="number" min="2011" max="2030" placeholder="2018" />
 
           <label><input id="pension_yes" type="checkbox" checked /> Deduct pension (7% of salary)</label>
         </div>
@@ -76,7 +76,7 @@
 
     <script>
       function getTaxBrackets(month, year) {
-        if (month >= 11 && year >= 2017) {
+        if ((month >= 11 and year == 2017)or (year > 2017) {
           return [
             [0, 2000, 0, 0],
             [2001, 4000, 0.15, 300],
