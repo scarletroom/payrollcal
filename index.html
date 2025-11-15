@@ -25,14 +25,11 @@
   </head>
   <body>
     <div class="card">
-      <h1>Payroll Calculator (Web)</h1>
+      <h1>Ethiopian Government Employe Net Salary Calculator</h1>
       <p class="muted">This web UI implements the same tax logic as your Kivy app. Enter values and click Calculate.</p>
 
       <div class="row input-grid">
         <div class="col">
-          <label for="name">Employee Name</label>
-          <input id="name" type="text" placeholder="Name" />
-
           <label for="salary">Salary</label>
           <input id="salary" type="number" step="0.01" placeholder="0.00" />
 
@@ -48,6 +45,9 @@
           <input id="year" type="number" min="2011" max="2030" placeholder="2018" />
 
           <label><input id="pension_yes" type="checkbox" checked /> Deduct pension (7% of salary)</label>
+
+          <label for="other_deductions">Other Deductions</label>
+          <input id="other_deductions" type="number" step="0.01" placeholder="0.00" />
         </div>
       </div>
 
@@ -66,12 +66,16 @@
           <div id="tax_val">-</div>
         </div>
         <div class="result">
+          <div class="muted">Pension Amount</div>
+          <div id="pension_amount_val">-</div>
+        </div>
+        <div class="result">
           <div class="muted">Net Pay</div>
           <div id="netpay_val">-</div>
         </div>
       </div>
 
-      <footer>Original app: Kivy/KivyMD (native). This is a browser-compatible port of the calculation logic.</footer>
+      <footer>Original app: Kivy/KivyMD (native). This is a browser-compatible port of the calculation logic.<br/><strong>Creator: Belachew Kebede</strong></footer>
     </div>
 
     <script>
@@ -111,6 +115,7 @@
         const otherStr = document.getElementById('other_income').value;
         const monthStr = document.getElementById('month').value;
         const yearStr = document.getElementById('year').value;
+        const otherDeductionsStr = document.getElementById('other_deductions').value;
         const pension_yes = document.getElementById('pension_yes').checked;
 
         // If any required field is empty, behave like Python's float()/int() raising ValueError
@@ -123,6 +128,7 @@
         const other_income = parseFloat(otherStr);
         const month = parseInt(monthStr, 10);
         const year = parseInt(yearStr, 10);
+        const other_deductions = otherDeductionsStr ? parseFloat(otherDeductionsStr) : 0;
 
         if (isNaN(salary) || isNaN(other_income) || isNaN(month) || isNaN(year) || month < 1 || month > 12) {
           document.getElementById('netpay_val').textContent = 'Invalid input!';
@@ -142,22 +148,24 @@
           }
         }
 
-        const net_pay = total_income - pension - tax;
+        const net_pay = total_income - pension - tax - other_deductions;
 
         document.getElementById('pension_val').textContent = formatAmount(pension);
         document.getElementById('tax_val').textContent = formatAmount(tax);
+        document.getElementById('pension_amount_val').textContent = formatAmount(pension);
         document.getElementById('netpay_val').textContent = formatAmount(net_pay);
       }
 
       function resetForm(){
-        document.getElementById('name').value = '';
         document.getElementById('salary').value = '';
         document.getElementById('other_income').value = '';
         document.getElementById('month').value = '';
         document.getElementById('year').value = '';
+        document.getElementById('other_deductions').value = '';
         document.getElementById('pension_yes').checked = true;
         document.getElementById('pension_val').textContent = '-';
         document.getElementById('tax_val').textContent = '-';
+        document.getElementById('pension_amount_val').textContent = '-';
         document.getElementById('netpay_val').textContent = '-';
       }
 
