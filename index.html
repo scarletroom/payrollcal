@@ -35,6 +35,9 @@
 
           <label for="other_income">Other Income</label>
           <input id="other_income" type="number" step="0.01" placeholder="0.00" />
+
+          <label for="other_deductions">Other Deductions</label>
+          <input id="other_deductions" type="number" step="0.01" placeholder="0.00" />
         </div>
 
         <div class="col">
@@ -45,9 +48,6 @@
           <input id="year" type="number" min="2011" max="2030" placeholder="2018" />
 
           <label><input id="pension_yes" type="checkbox" checked /> Deduct pension (7% of salary)</label>
-
-          <label for="other_deductions">Other Deductions</label>
-          <input id="other_deductions" type="number" step="0.01" placeholder="0.00" />
         </div>
       </div>
 
@@ -57,10 +57,6 @@
       </div>
 
       <div class="results">
-        <div class="result">
-          <div class="muted">Pension</div>
-          <div id="pension_val">-</div>
-        </div>
         <div class="result">
           <div class="muted">Tax</div>
           <div id="tax_val">-</div>
@@ -150,7 +146,6 @@
 
         const net_pay = total_income - pension - tax - other_deductions;
 
-        document.getElementById('pension_val').textContent = formatAmount(pension);
         document.getElementById('tax_val').textContent = formatAmount(tax);
         document.getElementById('pension_amount_val').textContent = formatAmount(pension);
         document.getElementById('netpay_val').textContent = formatAmount(net_pay);
@@ -163,7 +158,6 @@
         document.getElementById('year').value = '';
         document.getElementById('other_deductions').value = '';
         document.getElementById('pension_yes').checked = true;
-        document.getElementById('pension_val').textContent = '-';
         document.getElementById('tax_val').textContent = '-';
         document.getElementById('pension_amount_val').textContent = '-';
         document.getElementById('netpay_val').textContent = '-';
