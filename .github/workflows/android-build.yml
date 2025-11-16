@@ -53,7 +53,7 @@ jobs:
         run: yes | sdkmanager --licenses || true
 
       - name: Install Capacitor Android platform
-        run: npm install @capacitor/android --no-audit --no-fund || true
+        run: npm install @capacitor/android@5 --no-audit --no-fund || true
 
       - name: Initialize Capacitor (if needed)
         run: |
