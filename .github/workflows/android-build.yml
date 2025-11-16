@@ -63,16 +63,21 @@ jobs:
       - name: Copy web assets to native
         run: npx cap copy android
 
-      - name: Build Android APK
+      - name: Generate release keystore
+        run: |
+          keytool -genkeypair -v -keystore release.keystore -alias payrollcal -keyalg RSA -keysize 2048 -validity 10000 -storepass password -keypass password -dname "CN=PayrollCal, OU=Dev, O=PayrollCal, L=City, S=State, C=US"
+          mv release.keystore android/app/release.keystore
+
+      - name: Build signed release APK
         run: |
           export ANDROID_HOME=/home/runner/android-sdk
           unset ANDROID_SDK_ROOT
           cd android
           chmod +x gradlew || true
-          ./gradlew assembleDebug -Pandroid.injected.testOnly=false
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/release.keystore -Pandroid.injected.signing.store.password=password -Pandroid.injected.signing.key.alias=payrollcal -Pandroid.injected.signing.key.password=password
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: payrollcal-apk
-          path: android/app/build/outputs/**/*.apk
+          name: payrollcal-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
