@@ -52,9 +52,12 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
+      - name: Install Capacitor Android platform
+        run: npm install @capacitor/android --no-audit --no-fund || true
+
       - name: Initialize Capacitor (if needed)
         run: |
-          npx cap init com.scarletroom.payrollcal PayrollCal --web-dir=www || true
+          npx cap init "PayrollCal" "com.scarletroom.payrollcal" --web-dir=www --npm-client=npm || true
           npx cap add android || true
 
       - name: Copy web assets to native
