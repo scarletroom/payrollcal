@@ -1,0 +1,59 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Android SDK packages
+        run: |
+          sudo mkdir -p /sdk/cmdline-tools
+          sudo chown $USER /sdk
+          sdkmanager --sdk_root=/sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2" "cmdline-tools;latest"
+
+      - name: Prepare web assets
+        run: |
+          mkdir -p www
+          cp -R index.html manifest.json service-worker.js icons www/ || true
+
+      - name: Install npm deps
+        run: npm ci
+
+      - name: Initialize Capacitor (if needed)
+        run: |
+          npx cap init com.scarletroom.payrollcal PayrollCal --web-dir=www || true
+          npx cap add android || true
+
+      - name: Copy web assets to native
+        run: npx cap copy android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew || true
+          ./gradlew assembleDebug -Pandroid.injected.testOnly=false
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: payrollcal-apk
+          path: android/app/build/outputs/**/*.apk

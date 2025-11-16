@@ -1,0 +1,13 @@
+{
+  "name": "payrollcal",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:www": "echo 'copying web assets to www'",
+    "cap:init": "npx cap init --appId=com.scarletroom.payrollcal --appName=PayrollCal --web-dir=www"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
+  }
+}

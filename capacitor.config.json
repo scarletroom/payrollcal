@@ -1,0 +1,6 @@
+{
+  "appId": "com.scarletroom.payrollcal",
+  "appName": "PayrollCal",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

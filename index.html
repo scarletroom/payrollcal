@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg">
     <title>Payroll App</title>
     <style>
       :root{--bg:#f7fafc;--card:#ffffff;--muted:#475569;--accent:#2563eb}
@@ -10,6 +14,7 @@
       .card{width:min(820px,94vw);padding:28px;border-radius:12px;background:var(--card);box-shadow:0 8px 30px rgba(2,6,23,0.08)}
       h1{margin:0 0 8px;font-size:20px}
       .row{display:flex;gap:12px}
+      .controls button{font-size:16px}
       .col{display:flex;flex-direction:column;gap:8px}
       label{font-size:13px;color:#0f172a}
       input[type=text], input[type=number]{padding:10px;border-radius:8px;border:1px solid #e6edf3}
@@ -21,6 +26,12 @@
       .muted{color:#64748b;font-size:13px}
       footer{margin-top:14px;font-size:13px;color:#475569}
       @media(min-width:720px){.row.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+      @media(max-width:480px){
+        .controls{flex-direction:column}
+        .controls button{width:100%}
+        .card{padding:18px;border-radius:10px}
+        h1{font-size:18px}
+      }
     </style>
   </head>
   <body>
@@ -30,13 +41,13 @@
       <div class="row input-grid">
         <div class="col">
           <label for="salary">Salary</label>
-          <input id="salary" type="number" step="0.01" placeholder="0.00" />
+          <input id="salary" type="number" step="0.01" inputmode="decimal" placeholder="0.00" />
 
           <label for="other_income">Other Income</label>
-          <input id="other_income" type="number" step="0.01" placeholder="0.00" />
+          <input id="other_income" type="number" step="0.01" inputmode="decimal" placeholder="0.00" />
 
           <label for="other_deductions">Other Deductions</label>
-          <input id="other_deductions" type="number" step="0.01" placeholder="0.00" />
+          <input id="other_deductions" type="number" step="0.01" inputmode="decimal" placeholder="0.00" />
 
           <label><input id="pension_yes" type="checkbox" checked /> Deduct pension (7% of salary)</label>
         </div>
@@ -137,6 +148,13 @@
 
       document.getElementById('calc').addEventListener('click', calculate);
       document.getElementById('reset').addEventListener('click', resetForm);
+
+      // Register service worker for PWA (if available)
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function(){
+          navigator.serviceWorker.register('/service-worker.js').catch(()=>{});
+        });
+      }
     </script>
   </body>
 </html>
