@@ -47,7 +47,10 @@ jobs:
           cp -R index.html manifest.json service-worker.js icons www/ || true
 
       - name: Install npm deps
-        run: npm ci
+        run: npm install --no-audit --no-fund
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Initialize Capacitor (if needed)
         run: |
